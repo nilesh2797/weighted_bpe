@@ -1,0 +1,5 @@
+weighted_bpe.egg-info/
+build/
+dist/
+weighted_bpe_wrapper/__pycache__/
+weighted_bpe_wrapper/weighted_bpe_wrapper.c*
