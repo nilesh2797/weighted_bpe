@@ -23,7 +23,7 @@ pip install .
 Here is a basic example of how to use the weighted_bpe package:
 
 ```python
-from weighted_bpe.weighted_bpe_wrapper import weighted_bpe
+from weighted_bpe_wrapper import weighted_bpe
 
 # Example corpus and log probabilities
 corpus = [[1, 2, 3], [4, 5, 6]]
