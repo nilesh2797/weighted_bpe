@@ -9,7 +9,7 @@ The `weighted_bpe` package provides an efficient implementation of the Weighted 
 You can install the `weighted_bpe` package directly from GitHub using pip:
 
 ```bash
-pip install git+https://github.com/yourusername/weighted_bpe.git
+pip install git+https://github.com/nilesh2797/weighted_bpe.git
 ```
 Or, clone the repository and install it manually:
 
