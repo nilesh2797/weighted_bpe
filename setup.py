@@ -4,13 +4,13 @@ from Cython.Build import cythonize
 ext_modules = [
     Extension("weighted_bpe_wrapper.weighted_bpe_wrapper", 
               ["weighted_bpe_wrapper/weighted_bpe_wrapper.pyx", "weighted_bpe.cpp"],
-              extra_compile_args=['-std=c++11'],
+              extra_compile_args=['-std=c++11', '-O3'],
               language='c++')
 ]
 
 setup(
     name='weighted_bpe',
-    version='0.1.1',
+    version='0.1.2',
     packages=find_packages(),
     ext_modules=cythonize(ext_modules)
 )

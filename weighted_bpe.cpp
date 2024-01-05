@@ -150,43 +150,43 @@ void cpp_weighted_bpe(
 }
 
 int main() {
-    Corpus corpus = {{1,2,3}, {4,5,6}};
-    Probs cur_token_probs = {{0.1, 0.2, 0.3}, {0.4, 0.5, 0.58}};
+    // Corpus corpus = {{1,2,3}, {4,5,6}};
+    // Probs cur_token_probs = {{0.1, 0.2, 0.3}, {0.4, 0.5, 0.58}};
 
-    // Corpus corpus;
-    // Probs cur_token_probs;
+    Corpus corpus;
+    Probs cur_token_probs;
 
     Corpus out_corpus;
     Probs out_cur_token_probs;
     vector<Bigram> out_new_vocab;
 
-    // for (int i = 0; i < 1000; ++i) {
-    //     vector<int> sentence;
-    //     vector<double> probs;
-    //     for (int j = 0; j < 100; ++j) {
-    //         int rand_int = rand() % 100;
-    //         double rand_prob = (rand() % 100) / 100.0;
-    //         sentence.push_back(rand_int);
-    //         probs.push_back(rand_prob);
-    //     }
-    //     corpus.push_back(sentence);
-    //     cur_token_probs.push_back(probs);
-    // }
+    for (int i = 0; i < 10000; ++i) {
+        vector<int> sentence;
+        vector<double> probs;
+        for (int j = 0; j < 512; ++j) {
+            int rand_int = rand() % 100;
+            double rand_prob = (rand() % 100) / 100.0;
+            sentence.push_back(rand_int);
+            probs.push_back(rand_prob);
+        }
+        corpus.push_back(sentence);
+        cur_token_probs.push_back(probs);
+    }
 
-    cpp_weighted_bpe(corpus, cur_token_probs, out_corpus, out_cur_token_probs, out_new_vocab, 4);
-    for (const auto& sentence : out_corpus) {
-        for (int tok : sentence) {
-            cout << tok << " ";
-        }
-        cout << endl;
-    }
-    for (const auto& probs : out_cur_token_probs) {
-        for (double prob : probs) {
-            cout << prob << " ";
-        }
-        cout << endl;
-    }
-    for (const auto& bigram : out_new_vocab) {
-        cout << bigram.first << " " << bigram.second << endl;
-    }
+    cpp_weighted_bpe(corpus, cur_token_probs, out_corpus, out_cur_token_probs, out_new_vocab, 1000);
+    // for (const auto& sentence : out_corpus) {
+    //     for (int tok : sentence) {
+    //         cout << tok << " ";
+    //     }
+    //     cout << endl;
+    // }
+    // for (const auto& probs : out_cur_token_probs) {
+    //     for (double prob : probs) {
+    //         cout << prob << " ";
+    //     }
+    //     cout << endl;
+    // }
+    // for (const auto& bigram : out_new_vocab) {
+    //     cout << bigram.first << " " << bigram.second << endl;
+    // }
 }
