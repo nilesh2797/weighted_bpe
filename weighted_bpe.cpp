@@ -60,6 +60,10 @@ void update_bigram_weights(
             Bigram new_before_bigram(corpus[row][col - 1], merged_bigram_index);
             bigram_weights[before_bigram] -= original_prob;
             bigram_weights[new_before_bigram] += cur_token_probs[row][col];
+
+            if(abs(bigram_weights[before_bigram]) < 1e-20) {
+                bigram_weights.erase(before_bigram);
+            }
         }
 
         // assuming a symbol sequence "A B C D", if "B C" is merged, reduce the frequency of "C D".
@@ -69,6 +73,10 @@ void update_bigram_weights(
             Bigram new_after_bigram(merged_bigram_index, corpus[row][col + 1]);
             bigram_weights[after_bigram] -= cur_token_probs[row][col + 1];
             bigram_weights[new_after_bigram] += cur_token_probs[row][col + 1];
+
+            if(abs(bigram_weights[after_bigram]) < 1e-20) {
+                bigram_weights.erase(after_bigram);
+            }
         }
     }
 }
@@ -90,11 +98,11 @@ vector<UpdateLoc> merge_bigram_in_corpus(Corpus& corpus, Probs& cur_token_probs,
 
         for (size_t i = 0; i < sentence.size(); ) {
             if (i < sentence.size() - 1 && make_pair(sentence[i], sentence[i + 1]) == bigram) {
-                sentence[write_index] = new_tok_ctr;
-                probs[write_index] = probs[i] * probs[i + 1];
-
                 // Store the position where the bigram was merged
                 merged_positions.emplace_back(s, write_index, probs[i]);
+
+                sentence[write_index] = new_tok_ctr;
+                probs[write_index] = probs[i] * probs[i + 1];
 
                 i += 2;
             } else {
@@ -132,40 +140,40 @@ void cpp_weighted_bpe(
         out_new_vocab.push_back(best_bigram);
         update_bigram_weights(out_corpus, out_cur_token_probs, bigram_weights, best_bigram, merged_positions, new_tok_ctr);
         new_tok_ctr++;
-        
-        // assert bigram_weights is same as create_bigram_weights
+
+        // // assert bigram_weights is same as create_bigram_weights
         // auto test_bigram_weights = create_bigram_weights(out_corpus, out_cur_token_probs);
-        // for (const auto& bigram_weight : test_bigram_weights) {
+        // for (const auto& bigram_weight : bigram_weights) {
         //     assert(bigram_weights[bigram_weight.first] == bigram_weight.second);
         // }
     }
 }
 
 int main() {
-    // Corpus corpus = {{1,2,3}, {1,2,3}};
-    // Probs cur_token_probs = {{0.1, 0.2, 0.3}, {0.4, 0.5, 0.58}};
+    Corpus corpus = {{1,2,3}, {4,5,6}};
+    Probs cur_token_probs = {{0.1, 0.2, 0.3}, {0.4, 0.5, 0.58}};
 
-    Corpus corpus;
-    Probs cur_token_probs;
+    // Corpus corpus;
+    // Probs cur_token_probs;
 
     Corpus out_corpus;
     Probs out_cur_token_probs;
     vector<Bigram> out_new_vocab;
 
-    for (int i = 0; i < 1000; ++i) {
-        vector<int> sentence;
-        vector<double> probs;
-        for (int j = 0; j < 100; ++j) {
-            int rand_int = rand() % 100;
-            double rand_prob = (rand() % 100) / 100.0;
-            sentence.push_back(rand_int);
-            probs.push_back(rand_prob);
-        }
-        corpus.push_back(sentence);
-        cur_token_probs.push_back(probs);
-    }
+    // for (int i = 0; i < 1000; ++i) {
+    //     vector<int> sentence;
+    //     vector<double> probs;
+    //     for (int j = 0; j < 100; ++j) {
+    //         int rand_int = rand() % 100;
+    //         double rand_prob = (rand() % 100) / 100.0;
+    //         sentence.push_back(rand_int);
+    //         probs.push_back(rand_prob);
+    //     }
+    //     corpus.push_back(sentence);
+    //     cur_token_probs.push_back(probs);
+    // }
 
-    cpp_weighted_bpe(corpus, cur_token_probs, out_corpus, out_cur_token_probs, out_new_vocab, 1000);
+    cpp_weighted_bpe(corpus, cur_token_probs, out_corpus, out_cur_token_probs, out_new_vocab, 4);
     for (const auto& sentence : out_corpus) {
         for (int tok : sentence) {
             cout << tok << " ";
